@@ -62,14 +62,15 @@
 
     <div class="block">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[20, 50, 100, 200]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="tableTotals">
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[20, 50, 100, 200]"
+      :page-size="20"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableTotals">
       </el-pagination>
+      <!--<pagination></pagination>-->
     </div>
 
   </div>
@@ -79,18 +80,34 @@
 <script>
   import Vue from 'vue'
   import moment from 'moment'
-  import {getFeedBackRecord} from '../api/api'
+  import pagination from 'components/pagination.vue'
+  import { getFeedBackRecord } from '../api/api'
 
   export default {
-    data() {
+    props: {
+      //表格总页数
+      tableTotals: Number,
+      //默认每页数据量
+      Limit: Number,
+      Offset: Number,
+      //默认高亮行数据id
+      highlightId: Number,
+      //查询的页码
+      page: Number,
+      //当前页码
+      currentPage: Number,
+    },
+
+    data () {
       return {
         loading2: true,
         //表格数据
         tableData: [],
-        //表格总页数
-        tableTotals: 0,
         //接口
         UserId: '',
+        /*
+        //表格总页数
+        tableTotals: 0,
         //默认每页数据量
         Limit: 20,
         Offset: 0,
@@ -100,22 +117,20 @@
         page: 1,
         //当前页码
         currentPage: 1,
-
+        */
         TimeValue: [this.global.MomentSubtract3Days, this.global.MomentNow]
-
-
       }
     },
     methods: {
       //获取数据
-      submitForm() {
-        var me = this;
+      submitForm () {
+        var me = this
         const loading = this.$loading({
           lock: true,
           text: 'Loading',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
-        });
+        })
 
         getFeedBackRecord({
           'UserId': Number(me.UserId) || 0,
@@ -124,16 +139,16 @@
           'Limit': me.Limit,
           'Offset': me.Offset
         })
-        .then(function (res) {
-          loading.close();
-          me.tableData = res.data.Rows;
-          me.tableTotals = res.data.Total;
-        })
-        .catch(function (err) {
-          loading.close()
-        })
+          .then(function (res) {
+            loading.close()
+            me.tableData = res.data.Rows
+            me.tableTotals = res.data.Total
+          })
+          .catch(function (err) {
+            loading.close()
+          })
       },
-      changeSize() {
+      /*changeSize() {
         this._data.tpageSize = this.pageSize;
       },
       handleSizeChange(size) { //一页多少条
@@ -151,10 +166,13 @@
       },
       searchclick() {//点击搜索
 
-      }
+      }*/
     },
-    beforeMount() {
-      this.submitForm();
+    components: {
+      'pagination': pagination
+    },
+    beforeMount () {
+      this.submitForm()
     }
 
   }

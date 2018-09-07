@@ -119,10 +119,6 @@
                   {{item.menuName}}
                 </template>
 
-                <!--<el-menu-item v-for="( child , index ) in item.children || []" :key="index" :index="child.path">
-                  {{child.menuName}}
-                </el-menu-item>-->
-
                 <children :routes = 'item.children'></children>
 
               </el-submenu>

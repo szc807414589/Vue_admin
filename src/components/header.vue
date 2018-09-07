@@ -23,6 +23,7 @@
 </template>
 <script>
   import Vue from 'vue'
+  import {logOut} from '../api/api'
   export default {
     name: 'headerbar',
     data() {
@@ -33,9 +34,7 @@
     },
     methods: {
       loginOut(){
-        Vue.axios.post(
-          '/admin/logout'
-        ).then((res) => {
+        logOut().then((res) => {
           this.$router.push({ path: '/login' });
         })
       }
